@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Heat Risk Monitor - Abqaiq</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f4f4;
+    }
+
+    header {
+      background-color: #e5e7e9;
+      color: black;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .box {
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 90%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .low { background: #c5f9e6; }
+    .moderate { background: #fbd9c2; }
+    .high { background: #f7b6b3; }
+    .extreme { background: #ff858f; color: white; }
+
+    .gif-person {
+      width: 100%;
+      max-width: 250px;
+      height: auto;
+      margin: 10px auto;
+      display: block;
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+
+    h3 {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    p {
+      font-size: 1em;
+      margin: 10px 0;
+    }
+
+    footer {
+      background-color:#e5e7e9;
+      color: black;
+      text-align: center;
+      padding: 20px 0;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center;">
+      <img src="logo.png" alt="Logo">
+    </div>
+    <div style="display: flex; align-items: center;">
+      <img src="logo1.png" alt="Logo">
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Beat The Heat ..🌡️</h2>
+    <h4><p>Heat Stress is Real — Protect Yourself</p> </h4>
+    <h4><p>Stay Cool, Stay Safe</p> </h4>
+    <div id="weatherBox" class="box">Loading weather data...</div>
+  </div>
+
+  <footer>
+    &copy; Made by Mastoura Omar HSEO @QIPP.
+  </footer>
+
+  <script>
+    const apiKey = '049b3bb41da1e7325fd301e774c02b9f';
+    const city = 'Abqaiq';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=en`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const temp = data.main.temp;
+        let risk = '';
+        let advice = '';
+        let cssClass = '';
+        let gifUrl = '';
+
+        if (temp < 30) {
+        risk = 'Low';
+        advice = 'Enjoy the pleasant weather and stay hydrated.';
+        cssClass = 'low';
+        gifUrl = 'https://media.giphy.com/media/qgAATYPEZs7bVoBxBf/giphy.gif';
+        }else if (temp < 38) {
+          risk = 'Moderate';
+          advice = 'Drink water regularly and take a break every hour.';
+          cssClass = 'moderate';
+          gifUrl = 'https://media.giphy.com/media/hyfcJYTqqX3RflmmJY/giphy.gif';
+        } else if (temp < 44) {
+          risk = 'High';
+          advice = 'Take a break every 30 minutes and stay in the shade.';
+          cssClass = 'high';
+          gifUrl = 'https://media.giphy.com/media/bwO4jlTzgh8U9MjCQb/giphy.gif';
+        } else {
+          risk = 'Very High 🔥';
+          advice = 'Take a break every 20 minutes and drink lots of water. Watch for heat exhaustion signs.';
+          cssClass = 'extreme';
+          gifUrl = 'https://media.giphy.com/media/shM2d99oHL8fBC2OZV/giphy.gif';
+        }
+
+        document.getElementById('weatherBox').className = 'box ' + cssClass;
+        document.getElementById('weatherBox').innerHTML = `
+          <img src="${gifUrl}" alt="Heat Animation" class="gif-person" />
+          <h2>${temp}°C</h2>
+          <h3>Heat Risk Level: ${risk}</h3>
+          <p><strong>Tip:</strong> ${advice}</p>
+        `;
+      })
+      .catch(() => {
+        document.getElementById('weatherBox').innerText = 'Could not load weather data.';
+      });
+  </script>
+
+</body>
+</html>
